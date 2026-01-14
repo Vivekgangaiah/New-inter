@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../.prisma/client"
+  output   = "../node_modules/@prisma/client/.prisma/client"
 }
 
 datasource db {
@@ -19,31 +19,31 @@ enum ApplicationStatus {
 }
 
 model Company {
-  id              String        @id @default(cuid())
-  name            String
-  careersUrl      String
-  targetRoles     String
-  preferredLocation String      @default("Mumbai, India")
-  logoUrl         String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  internships     Internship[]
+  id               String        @id @default(cuid())
+  name             String
+  careersUrl       String
+  targetRoles      String
+  preferredLocation String       @default("Mumbai, India")
+  logoUrl          String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  internships      Internship[]
 
   @@map("companies")
 }
 
 model Internship {
-  id              String        @id @default(cuid())
-  companyId       String
-  title           String
-  location        String
-  dateFound       DateTime      @default(now())
-  applyUrl        String
-  notes           String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  company         Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  application     Application?
+  id         String        @id @default(cuid())
+  companyId  String
+  title      String
+  location   String
+  dateFound  DateTime      @default(now())
+  applyUrl   String
+  notes      String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  company    Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  application Application?
 
   @@map("internships")
 }
@@ -62,3 +62,4 @@ model Application {
 
   @@map("applications")
 }
+

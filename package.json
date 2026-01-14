@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && node scripts/fix-prisma-default.js && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate && node scripts/setup-prisma.js",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build"
+    "postinstall": "prisma generate && node scripts/fix-prisma-default.js",
+    "vercel-build": "prisma generate && node scripts/fix-prisma-default.js && prisma migrate deploy && next build"
   },
   "dependencies": {
     "@prisma/client": "^7.2.0",
