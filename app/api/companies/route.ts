@@ -5,12 +5,17 @@ export async function GET() {
   try {
     const companies = await getAllCompanies();
     return NextResponse.json(companies);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching companies:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch companies' },
-      { status: 500 }
-    );
+    // Return empty array instead of error object to prevent frontend crashes
+    // Check if it's a database connection error
+    if (error?.code === 'P1001' || error?.message?.includes('connect')) {
+      return NextResponse.json(
+        { error: 'Database connection failed. Please check your DATABASE_URL environment variable.' },
+        { status: 503 }
+      );
+    }
+    return NextResponse.json([], { status: 200 });
   }
 }
 

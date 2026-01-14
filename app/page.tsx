@@ -19,10 +19,22 @@ export default function Home() {
   const fetchCompanies = async () => {
     try {
       const res = await fetch('/api/companies');
+      if (!res.ok) {
+        console.error('Failed to fetch companies:', res.statusText);
+        setCompanies([]);
+        return;
+      }
       const data = await res.json();
-      setCompanies(data);
+      // Ensure data is an array
+      if (Array.isArray(data)) {
+        setCompanies(data);
+      } else {
+        console.error('Invalid response format:', data);
+        setCompanies([]);
+      }
     } catch (error) {
       console.error('Error fetching companies:', error);
+      setCompanies([]);
     } finally {
       setLoading(false);
     }
@@ -146,7 +158,7 @@ export default function Home() {
         </div>
       )}
 
-      {companies.length === 0 ? (
+      {!loading && companies.length === 0 ? (
         <Card className="py-12">
           <CardContent className="flex flex-col items-center justify-center text-center">
             <Building2 className="mb-4 h-12 w-12 text-slate-500" />
@@ -160,7 +172,7 @@ export default function Home() {
             </Button>
           </CardContent>
         </Card>
-      ) : (
+      ) : !loading ? (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {companies.map((company) => (
             <Link key={company.id} href={`/companies/${company.id}`}>
@@ -222,7 +234,7 @@ export default function Home() {
             </Link>
           ))}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
